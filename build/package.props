@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup Label="Package">
+    <Description>lcn-csharp</Description>
+    <Copyright></Copyright>
+    <PackageLicenseUrl>https://github.com/Swoobat/lcn-csharp/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Swoobat/lcn-csharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Swoobat/lcn-csharp.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>distributed-transactions</PackageTags>
+    <Company>lcn-csharp Org.</Company>
+    <Authors>WithLin,yuzd</Authors>
+  </PropertyGroup>
+</Project>
