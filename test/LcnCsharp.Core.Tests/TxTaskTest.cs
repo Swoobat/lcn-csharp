@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,26 +12,27 @@ namespace LcnCsharp.Core.Tests
         [Fact]
         public void TxTaskTest1()
         {
+            
             TxTask signal = new TxTask();
 
             new Task(() =>
             {
-                Trace.WriteLine("µ±Ç°Ïß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                Trace.WriteLine("å½“å‰çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
                 Thread.Sleep(1000);
                 signal.AwaitTask(() =>
                 {
-                    Trace.WriteLine("¿ªÊ¼µÈ´ı,µ±Ç°Ïß³ÌID" +Thread.CurrentThread.ManagedThreadId);
+                    Trace.WriteLine("å¼€å§‹ç­‰å¾…,å½“å‰çº¿ç¨‹ID" +Thread.CurrentThread.ManagedThreadId);
                 });
 
-                Trace.WriteLine("½áÊøµÈ´ı,µ±Ç°Ïß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                Trace.WriteLine("ç»“æŸç­‰å¾…,å½“å‰çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
             }).Start();
 
             new Task(() =>
             {
                 Thread.Sleep(3000);
-                Trace.WriteLine("¿ªÊ¼ÊÍ·ÅÏß³ÌÏß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                Trace.WriteLine("å¼€å§‹é‡Šæ”¾çº¿ç¨‹çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
                 signal.SignalTask();
-                Trace.WriteLine("½áÊøÊÍ·ÅÏß³ÌÏß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                Trace.WriteLine("ç»“æŸé‡Šæ”¾çº¿ç¨‹çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
             }).Start();
 
             Thread.Sleep(10000);
@@ -45,22 +46,22 @@ namespace LcnCsharp.Core.Tests
             Assert.Equal(signal2,signal);
             new Task(() =>
             {
-                Trace.WriteLine("µ±Ç°Ïß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                Trace.WriteLine("å½“å‰çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
                 Thread.Sleep(1000);
                 signal.AwaitTask(() =>
                 {
-                    Trace.WriteLine("¿ªÊ¼µÈ´ı,µ±Ç°Ïß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                    Trace.WriteLine("å¼€å§‹ç­‰å¾…,å½“å‰çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
                 });
 
-                Trace.WriteLine("½áÊøµÈ´ı,µ±Ç°Ïß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                Trace.WriteLine("ç»“æŸç­‰å¾…,å½“å‰çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
             }).Start();
 
             new Task(() =>
             {
                 Thread.Sleep(3000);
-                Trace.WriteLine("¿ªÊ¼ÊÍ·ÅÏß³ÌÏß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                Trace.WriteLine("å¼€å§‹é‡Šæ”¾çº¿ç¨‹çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
                 signal.SignalTask();
-                Trace.WriteLine("½áÊøÊÍ·ÅÏß³ÌÏß³ÌID" + Thread.CurrentThread.ManagedThreadId);
+                Trace.WriteLine("ç»“æŸé‡Šæ”¾çº¿ç¨‹çº¿ç¨‹ID" + Thread.CurrentThread.ManagedThreadId);
             }).Start();
        
             Thread.Sleep(10000);
