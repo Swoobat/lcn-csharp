@@ -63,7 +63,7 @@ namespace LcnCsharp.Core.Tests
                         transaction.Commit(); //会调用LCNDbConnection的Commit方法 会拦截
                         state = 1;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         transaction.Rollback(); //会调用LCNDbConnection的Rollback方法 会拦截
                     }
@@ -76,6 +76,8 @@ namespace LcnCsharp.Core.Tests
             }
             Thread.Sleep(10000);
         }
+
+        [Fact]
         public async Task Task2()
         {
             Trace.WriteLine(TestAsyncLocal.Value.Test);

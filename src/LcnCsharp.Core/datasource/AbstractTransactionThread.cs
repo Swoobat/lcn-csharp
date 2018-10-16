@@ -10,14 +10,9 @@ namespace LcnCsharp.Core.datasource
 {
     public abstract class AbstractTransactionThread
     {
-        private volatile bool hasStartTransaction = false;
 
         protected void StartRunnable()
         {
-            if (hasStartTransaction)
-            {
-                return;
-            }
 
             new Thread(() =>
             {
@@ -25,13 +20,13 @@ namespace LcnCsharp.Core.datasource
                 {
                     Transaction();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     try
                     {
                         RollbackConnection();
                     }
-                    catch (DbException e1)
+                    catch (DbException)
                     {
                     }
                 }
@@ -41,7 +36,7 @@ namespace LcnCsharp.Core.datasource
                     {
                         CloseConnection();
                     }
-                    catch (DbException e)
+                    catch (DbException)
                     {
                     }
                 }

@@ -1,27 +1,86 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
+using LcnCsharp.Core.framework.task;
 
 namespace LcnCsharp.Core.datasource
 {
-    public class LCNDbConnection: AbstractTxcConnection
+    public class LCNDbConnection : AbstractTxcConnection
     {
-        public LCNDbConnection(IDbConnection dbConnection) : base(dbConnection)
+
+        public LCNDbConnection(IDbConnection dbConnection, string groupId) : base(dbConnection)
+        {
+            //创建信号管理器组
+            if (string.IsNullOrEmpty(groupId)) throw new ArgumentException(nameof(groupId));
+            this.GroupId = groupId;
+            TxTaskGroup taskGroup = TxTaskGroupManager.GetInstance().CreateTxTaskGroup(this.GroupId);
+            this.TxTask = taskGroup.CurrentTxTask;
+        }
+
+        public override void Dispose()
         {
 
         }
-        public override void Commit(IDbTransaction dbTransaction)
+
+        public override void Close()
         {
-            throw new NotImplementedException();
+
         }
 
-        public override void Rollback(IDbTransaction dbTransaction)
+        /// <summary>
+        /// IDbConnection创建的Transaction的Commit拦截
+        /// </summary>
+        protected override void Commit()
         {
-            throw new NotImplementedException();
+            //记录信息
+            //假提交
+            //开启一个新的线程信号器 如果有信号会 执行真正的commit
+            StartRunnable();
         }
 
-        public override void Close(IDbConnection dbConnection)
+        /// <summary>
+        /// IDbConnection创建的Transaction的Rollback拦截
+        /// </summary>
+        protected override void Rollback()
         {
-            throw new NotImplementedException();
+            GetRealDbTransaction()?.Rollback();
         }
+
+
+        #region 信号器操作线程
+
+        protected override void Transaction()
+        {
+            this.TxTask.AwaitTask();
+            int rs = this.TxTask.GetState();
+            try
+            {
+                if (rs == 1)
+                {
+                    GetRealDbTransaction()?.Commit();
+                }
+                else
+                {
+                    RollbackConnection();
+                }
+            }
+            catch (DbException)
+            {
+                RollbackConnection();
+                TxTask.SetState((int)TxTaskState.ConnectionError);
+            }
+            TxTask.Remove();
+        }
+
+        protected override void CloseConnection()
+        {
+            GetRealDbConnection()?.Close();
+        }
+
+        protected override void RollbackConnection()
+        {
+            Rollback();
+        }
+        #endregion
     }
 }
