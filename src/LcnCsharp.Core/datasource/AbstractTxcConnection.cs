@@ -4,7 +4,7 @@ using System.Data;
 
 namespace LcnCsharp.Core.datasource
 {
-    public abstract class AbstractTxcConnection : ILCNDbConnection
+    public abstract class AbstractTxcConnection : ITxcConnection
     {
         private readonly IDbConnection _dbConnection;
         private String groupId;

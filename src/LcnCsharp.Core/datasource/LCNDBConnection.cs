@@ -5,13 +5,12 @@ using System.Text;
 
 namespace LcnCsharp.Core.datasource
 {
-    public class LCNStartConnection: AbstractTxcConnection
+    public class LCNDbConnection: AbstractTxcConnection
     {
-        public LCNStartConnection(IDbConnection dbConnection) : base(dbConnection)
+        public LCNDbConnection(IDbConnection dbConnection) : base(dbConnection)
         {
 
         }
-
         public override void Commit(IDbTransaction dbTransaction)
         {
             throw new NotImplementedException();
