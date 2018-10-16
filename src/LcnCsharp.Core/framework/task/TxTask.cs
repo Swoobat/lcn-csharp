@@ -13,16 +13,16 @@ namespace LcnCsharp.Core.framework.task
         /// <summary>
         /// 是否被唤醒
         /// </summary>
-        private volatile bool isNotify = false;
+        private volatile bool _isNotify = false;
         /// <summary>
         /// 是否执行等待
         /// </summary>
-        private volatile bool isAwait = false;
+        private volatile bool _isAwait = false;
 
         /// <summary>
         /// 数据状态用于业务处理
         /// </summary>
-        private volatile int state = 0;
+        private volatile int _state = 0;
         #endregion
 
         #region Property
@@ -69,12 +69,12 @@ namespace LcnCsharp.Core.framework.task
 
         public int GetState()
         {
-            return state;
+            return _state;
         }
 
         public void SetState(int _state)
         {
-            this.state = _state;
+            this._state = _state;
         }
 
 

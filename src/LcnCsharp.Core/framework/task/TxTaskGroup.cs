@@ -8,7 +8,7 @@ namespace LcnCsharp.Core.framework.task
     public class TxTaskGroup
     {
         #region Field
-        private readonly List<TxTask> TxTasks = new List<TxTask>();
+        private readonly List<TxTask> _txTasks = new List<TxTask>();
         #endregion
 
         #region Property
@@ -42,7 +42,7 @@ namespace LcnCsharp.Core.framework.task
         /// <param name="task"></param>
         public void AddTxTask(TxTask task)
         {
-            TxTasks.Add(task);
+            _txTasks.Add(task);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace LcnCsharp.Core.framework.task
         /// <returns></returns>
         public List<TxTask> GetTxTasks()
         {
-            return TxTasks;
+            return _txTasks;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace LcnCsharp.Core.framework.task
         /// <returns></returns>
         public bool IsAwait()
         {
-            foreach (var task in TxTasks)
+            foreach (var task in _txTasks)
             {
                 if (!task.IsAwait())
                 {
@@ -75,7 +75,7 @@ namespace LcnCsharp.Core.framework.task
         /// </summary>
         public void SignalTask()
         {
-            foreach (var task in TxTasks)
+            foreach (var task in _txTasks)
             {
                 task.SetState(this.State);
                 task.SignalTask();
