@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using LcnCsharp.Core.framework.task;
 
 namespace LcnCsharp.Core.datasource
