@@ -1,13 +1,13 @@
-﻿using LcnCsharp.Core.framework.task;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LcnCsharp.Core.framework.task;
 
 namespace LcnCsharp.Core.netty
 {
-    public class LocalTransactionServer : ITransactionServer
+    public class LocalTransactionServer: ITransactionServer
     {
-        private readonly ConcurrentDictionary<string, List<string>> localGroups = new ConcurrentDictionary<string, List<string>>();
+        private  readonly ConcurrentDictionary<string,List<string>> localGroups = new ConcurrentDictionary<string, List<string>>();
         public void CreateTransactionGroup(string groupId)
         {
             if (!localGroups.ContainsKey(groupId))
@@ -23,7 +23,7 @@ namespace LcnCsharp.Core.netty
 
         public int CloseTransactionGroup(string groupId, int state)
         {
-            //通知
+            //模拟通知
             new Task(() =>
             {
                 var taskGroup = TxTaskGroupManager.GetInstance().GetTxTaskGroup(groupId);
@@ -31,7 +31,7 @@ namespace LcnCsharp.Core.netty
                 taskGroup?.SignalTask();
             }).Start();
 
-            return localGroups.TryRemove(groupId, out _)?1:0;
+            return localGroups.TryRemove(groupId, out _) ? 1 : 0;
         }
     }
 }
