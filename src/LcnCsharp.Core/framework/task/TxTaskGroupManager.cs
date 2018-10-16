@@ -36,7 +36,7 @@ namespace LcnCsharp.Core.framework.task
         /// <param name="key"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public TxTaskGroup CreateTxTaskGroup(string key, string type)
+        public TxTaskGroup CreateTxTaskGroup(string key, string type = "db")
         {
             TxTaskGroup taskGroup = GetTxTaskGroup(key);
             if (taskGroup == null)
@@ -60,7 +60,8 @@ namespace LcnCsharp.Core.framework.task
         /// <returns></returns>
         public TxTaskGroup GetTxTaskGroup(string key)
         {
-            return taskMap[key];
+            taskMap.TryGetValue(key, out var txTaskGroup);
+            return txTaskGroup;
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace LcnCsharp.Core.framework.task
         /// <param name="key"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public TxTask GetTxTask(string key, string type)
+        public TxTask GetTxTask(string key, string type="db")
         {
             string taskKey = type + "_" + key;
             if (taskMap.TryGetValue(key, out TxTaskGroup txGroup))

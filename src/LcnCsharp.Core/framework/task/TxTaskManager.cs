@@ -54,7 +54,8 @@ namespace LcnCsharp.Core.framework.task
         /// <returns></returns>
         public TxTask GetTxTask(string key)
         {
-            return taskMap[key];
+            taskMap.TryGetValue(key, out var txTaskGroup);
+            return txTaskGroup;
         }
 
         /// <summary>

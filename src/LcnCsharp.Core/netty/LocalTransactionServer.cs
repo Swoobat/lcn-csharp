@@ -1,14 +1,13 @@
-﻿using System;
+﻿using LcnCsharp.Core.framework.task;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
-using LcnCsharp.Core.framework.task;
+using System.Threading.Tasks;
 
 namespace LcnCsharp.Core.netty
 {
-    public class LocalTransactionServer: ITransactionServer
+    public class LocalTransactionServer : ITransactionServer
     {
-        private  readonly ConcurrentDictionary<string,List<string>> localGroups = new ConcurrentDictionary<string, List<string>>();
+        private readonly ConcurrentDictionary<string, List<string>> localGroups = new ConcurrentDictionary<string, List<string>>();
         public void CreateTransactionGroup(string groupId)
         {
             if (!localGroups.ContainsKey(groupId))
@@ -17,15 +16,22 @@ namespace LcnCsharp.Core.netty
             }
         }
 
-        public TxTaskGroup AddTransactionGroup(string groupId, string taskId)
+        public void AddTransactionGroup(string groupId, string taskId)
         {
-            var group = new TxTaskGroup(groupId);
-            return group;
+            localGroups[groupId].Add(taskId);
         }
 
         public int CloseTransactionGroup(string groupId, int state)
         {
-           return localGroups.TryRemove(groupId,out _)?1:0;
+            //通知
+            new Task(() =>
+            {
+                var taskGroup = TxTaskGroupManager.GetInstance().GetTxTaskGroup(groupId);
+                taskGroup.State = 1;
+                taskGroup?.SignalTask();
+            }).Start();
+
+            return localGroups.TryRemove(groupId, out _)?1:0;
         }
     }
 }

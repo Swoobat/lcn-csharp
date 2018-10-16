@@ -4,35 +4,36 @@ using System.Data;
 
 namespace LcnCsharp.Core.datasource
 {
-    public abstract class AbstractTxcConnection : ITxcConnection
+    public abstract class AbstractTxcConnection : AbstractTransactionThread, ITxcConnection
     {
         private readonly IDbConnection _dbConnection;
-        private String groupId;
-        private TxTask waitTask;
+        private IDbTransaction _dbTransaction;
+
+        public string GroupId { get; set; }
+        public TxTask TxTask { get; set; }
 
         protected AbstractTxcConnection(IDbConnection dbConnection)
         {
-            _dbConnection = dbConnection;
+            _dbConnection = dbConnection ?? throw new ArgumentException(nameof(dbConnection));
         }
-        public void Dispose()
+        public virtual void Dispose()
         {
-            _dbConnection.Dispose();
+            CloseConnection();
         }
 
-        public abstract void Commit(IDbTransaction dbTransaction);
-        public abstract void Rollback(IDbTransaction dbTransaction);
-        public abstract void Close(IDbConnection dbConnection);
+        protected abstract void Commit();
+        protected abstract void Rollback();
 
         public IDbTransaction BeginTransaction()
         {
-            var realTransaction = _dbConnection.BeginTransaction();
-            return new LCNDbTransaction(realTransaction, Commit, Rollback);
+            _dbTransaction = _dbConnection.BeginTransaction();
+            return new LCNDbTransaction(_dbTransaction, Commit, Rollback);
         }
 
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
-            var realTransaction = _dbConnection.BeginTransaction(il);
-            return new LCNDbTransaction(realTransaction, Commit, Rollback);
+            _dbTransaction = _dbConnection.BeginTransaction(il);
+            return new LCNDbTransaction(_dbTransaction, Commit, Rollback);
         }
 
         public void ChangeDatabase(string databaseName)
@@ -40,9 +41,9 @@ namespace LcnCsharp.Core.datasource
             _dbConnection.ChangeDatabase(databaseName);
         }
 
-        public void Close()
+        public virtual void Close()
         {
-            Close(_dbConnection);
+            CloseConnection();
         }
 
         public IDbCommand CreateCommand()
@@ -67,12 +68,15 @@ namespace LcnCsharp.Core.datasource
 
         public TxTask GetWaitTask()
         {
-            return this.waitTask;
+            return this.TxTask;
         }
 
         public string GetGroupId()
         {
-            return groupId;
+            return GroupId;
         }
+
+        public IDbConnection GetRealDbConnection() => _dbConnection;
+        public IDbTransaction GetRealDbTransaction() => _dbTransaction;
     }
 }

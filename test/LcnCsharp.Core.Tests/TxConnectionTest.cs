@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LcnCsharp.Core.datasource;
 using LcnCsharp.Core.framework.task;
 using LcnCsharp.Core.netty;
+using MySql.Data.MySqlClient;
 using Xunit;
 
 namespace LcnCsharp.Core.Tests
@@ -23,7 +24,7 @@ namespace LcnCsharp.Core.Tests
         [Fact]
         public void TxConnectionTest1()
         {
-            IDbConnection dbConnection = new LCNDbConnection(new SqlConnection());
+            IDbConnection dbConnection = new LCNDbConnection(new SqlConnection(),Guid.NewGuid().ToString("N"));
             var transaction = dbConnection.BeginTransaction();
             transaction.Commit();
         }
@@ -47,7 +48,7 @@ namespace LcnCsharp.Core.Tests
             server.CreateTransactionGroup(groupId);
             try
             {
-                using (IDbConnection dbConnection = new LCNDbConnection(new SqlConnection("XXXXX")))
+                using (IDbConnection dbConnection = new LCNDbConnection(new MySqlConnection("Server=localhost;Port=3306;Database=test;Uid=root;Pwd=p@ssw0rd;charset=utf8;SslMode=none;"), groupId))
                 {
                     dbConnection.Open();
                     var transaction = dbConnection.BeginTransaction(); //返回的是我们包装的LCNDbTransaction
@@ -55,6 +56,10 @@ namespace LcnCsharp.Core.Tests
                     try
                     {
                         //执行db代码
+                        var command = dbConnection.CreateCommand();
+                        command.CommandText = "insert into t_test (name) values ('aaaa');";
+                        command.ExecuteNonQuery();
+
                         transaction.Commit(); //会调用LCNDbConnection的Commit方法 会拦截
                         state = 1;
                     }
@@ -69,6 +74,7 @@ namespace LcnCsharp.Core.Tests
             {
                 server.CloseTransactionGroup(groupId, state);
             }
+            Thread.Sleep(10000);
         }
         public async Task Task2()
         {

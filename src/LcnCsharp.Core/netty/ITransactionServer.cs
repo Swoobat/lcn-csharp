@@ -9,7 +9,7 @@ namespace LcnCsharp.Core.netty
     {
         void CreateTransactionGroup(string groupId);
 
-        TxTaskGroup AddTransactionGroup(string groupId, String taskId);
+        void AddTransactionGroup(string groupId, String taskId);
 
         int CloseTransactionGroup(string groupId, int state);
     }

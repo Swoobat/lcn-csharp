@@ -6,9 +6,9 @@ namespace LcnCsharp.Core.datasource
     public class LCNDbTransaction : IDbTransaction
     {
         private readonly IDbTransaction _dbTransaction;
-        private readonly Action<IDbTransaction> _commitAction;
-        private readonly Action<IDbTransaction> _rollbackAction;
-        public LCNDbTransaction(IDbTransaction dbTransaction, Action<IDbTransaction> commitAction, Action<IDbTransaction> rollbackAction)
+        private readonly Action _commitAction;
+        private readonly Action _rollbackAction;
+        public LCNDbTransaction(IDbTransaction dbTransaction, Action commitAction, Action rollbackAction)
         {
             _dbTransaction = dbTransaction;
             _commitAction = commitAction;
@@ -22,7 +22,7 @@ namespace LcnCsharp.Core.datasource
             }
             else
             {
-                _commitAction(_dbTransaction);
+                _commitAction();
             }
             
         }
@@ -35,7 +35,7 @@ namespace LcnCsharp.Core.datasource
             }
             else
             {
-                _rollbackAction(_dbTransaction);
+                _rollbackAction();
             }
         }
         public IDbConnection Connection => _dbTransaction.Connection;
