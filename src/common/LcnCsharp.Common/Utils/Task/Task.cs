@@ -162,7 +162,7 @@ namespace LcnCsharp.Common.Utils.Task
             }
         }
 
-        private void waitTask()
+        private void WaitTask()
         {
             Condition.WaitOne();
             if (_hasExecute)
@@ -177,7 +177,7 @@ namespace LcnCsharp.Common.Utils.Task
                 }
                 _hasExecute = false;
                 _execute = null;
-                waitTask();
+                WaitTask();
             }
         }
 
@@ -188,7 +188,7 @@ namespace LcnCsharp.Common.Utils.Task
                 lock (_waitLock)
                 {
                     _isAwait = true;
-                    waitTask();
+                    WaitTask();
                 }
             }
             catch (Exception)
@@ -209,7 +209,7 @@ namespace LcnCsharp.Common.Utils.Task
             }
 
             _isAwait = true;
-            waitTask();
+            WaitTask();
         }
 
 
