@@ -1,21 +1,24 @@
-﻿using System;
+﻿using LcnCsharp.Core.Framework.Task;
 using System.Data;
 using System.Data.Common;
-using LcnCsharp.Core.Framework.Task;
 
 namespace LcnCsharp.Core.Datasource.Impl
 {
-    public class LCNDbConnection : AbstractTxcConnection
+    /// <summary>
+    /// 分布式DB连接托管器
+    /// </summary>
+    public class LCNDBConnection : AbstractTxcConnection
     {
+        #region Constructor
 
-        public LCNDbConnection(IDbConnection dbConnection, string groupId) : base(dbConnection)
+        public LCNDBConnection(IDbConnection dbConnection, string groupId) : base(dbConnection, groupId)
         {
-            //创建信号管理器组
-            if (string.IsNullOrEmpty(groupId)) throw new ArgumentException(nameof(groupId));
-            this.GroupId = groupId;
-            TxTaskGroup taskGroup = TxTaskGroupManager.GetInstance().CreateTxTaskGroup(this.GroupId);
-            this.TxTask = taskGroup.CurrentTxTask;
+
         }
+
+        #endregion
+
+        #region Implement Of IDbConnection
 
         public override void Dispose()
         {
@@ -26,7 +29,9 @@ namespace LcnCsharp.Core.Datasource.Impl
         {
 
         }
+        #endregion
 
+        #region 抽象的事物方法实现
         /// <summary>
         /// IDbConnection创建的Transaction的Commit拦截
         /// </summary>
@@ -46,9 +51,12 @@ namespace LcnCsharp.Core.Datasource.Impl
             GetRealDbTransaction()?.Rollback();
         }
 
+        #endregion
 
         #region 信号器操作线程
-
+        /// <summary>
+        /// 信号器执行事物方法回调
+        /// </summary>
         protected override void Transaction()
         {
             this.TxTask.AwaitTask();
@@ -71,12 +79,16 @@ namespace LcnCsharp.Core.Datasource.Impl
             }
             TxTask.Remove();
         }
-
+        /// <summary>
+        /// 信号器执行关闭真实db连接回调
+        /// </summary>
         protected override void CloseConnection()
         {
             GetRealDbConnection()?.Close();
         }
-
+        /// <summary>
+        /// 信号器执行回滚事物回调
+        /// </summary>
         protected override void RollbackConnection()
         {
             Rollback();

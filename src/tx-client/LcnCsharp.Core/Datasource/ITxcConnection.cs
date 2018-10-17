@@ -4,8 +4,16 @@ namespace LcnCsharp.Core.Datasource
 {
     public interface ITxcConnection:IDbConnection,ILCNResource
     {
-        //void Commit(IDbTransaction dbTransaction);
-        //void Rollback(IDbTransaction dbTransaction);
-        //void Close(IDbConnection dbConnection);
+        /// <summary>
+        /// 获取被托管的真实db连接器
+        /// </summary>
+        /// <returns></returns>
+        IDbConnection GetRealDbConnection();
+
+        /// <summary>
+        /// 获取被托管的真实db事物
+        /// </summary>
+        /// <returns></returns>
+        IDbTransaction GetRealDbTransaction();
     }
 }

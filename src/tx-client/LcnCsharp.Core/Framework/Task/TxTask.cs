@@ -81,7 +81,7 @@ namespace LcnCsharp.Core.Framework.Task
         /// <summary>
         /// 中断线程等待信号
         /// </summary>
-        /// <param name="_back">前置执行任务</param>
+        /// <param name="back">前置执行任务</param>
         public void AwaitTask(Action back = null)
         {
             #region 前置执行
@@ -103,7 +103,7 @@ namespace LcnCsharp.Core.Framework.Task
         /// <summary>
         /// 释放信号
         /// </summary>
-        /// <param name="_back">执行之后停顿</param>
+        /// <param name="back">执行之后停顿</param>
         public void SignalTask(Action back = null)
         {
             _isNotify = true;

@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using LcnCsharp.Core.Datasource;
 using LcnCsharp.Core.Datasource.Impl;
 using LcnCsharp.Core.netty;
+using LcnCsharp.Core.Netty.Impl;
 using MySql.Data.MySqlClient;
 using Xunit;
 
@@ -24,7 +24,7 @@ namespace LcnCsharp.Core.Tests
         [Fact]
         public void TxConnectionTest1()
         {
-            IDbConnection dbConnection = new LCNDbConnection(new SqlConnection(),Guid.NewGuid().ToString("N"));
+            IDbConnection dbConnection = new LCNDBConnection(new SqlConnection(),Guid.NewGuid().ToString("N"));
             var transaction = dbConnection.BeginTransaction();
             transaction.Commit();
         }
@@ -48,7 +48,7 @@ namespace LcnCsharp.Core.Tests
             server.CreateTransactionGroup(groupId);
             try
             {
-                using (IDbConnection dbConnection = new LCNDbConnection(new MySqlConnection("Server=localhost;Port=3306;Database=test;Uid=root;Pwd=p@ssw0rd;charset=utf8;SslMode=none;"), groupId))
+                using (IDbConnection dbConnection = new LCNDBConnection(new MySqlConnection("Server=localhost;Port=3306;Database=test;Uid=root;Pwd=p@ssw0rd;charset=utf8;SslMode=none;"), groupId))
                 {
                     dbConnection.Open();
                     var transaction = dbConnection.BeginTransaction(); //返回的是我们包装的LCNDbTransaction

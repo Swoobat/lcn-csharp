@@ -9,12 +9,12 @@ namespace LcnCsharp.Core.Datasource
         /// 用于关闭时检查是否未删除
         /// </summary>
         /// <returns></returns>
-        TxTask GetWaitTask();
+        TxTask WaitTask { get; }
 
         /// <summary>
         /// 事务组id
         /// </summary>
         /// <returns></returns>
-        string GetGroupId();
+        string GroupId { get; }
     }
 }

@@ -1,43 +1,81 @@
-﻿using System;
-using System.Data;
-using LcnCsharp.Core.Datasource.Impl;
+﻿using LcnCsharp.Core.Datasource.Impl;
 using LcnCsharp.Core.Framework.Task;
+using System;
+using System.Data;
 
 namespace LcnCsharp.Core.Datasource
 {
+    /// <summary>
+    /// 一个抽象的托管DB连接器
+    /// </summary>
     public abstract class AbstractTxcConnection : AbstractTransactionThread, ITxcConnection
     {
+        #region Field
+        /// <summary>
+        /// 被托管的真实DB连接对象
+        /// </summary>
         private readonly IDbConnection _dbConnection;
+        /// <summary>
+        /// 被退关的真实DB的事物对象
+        /// </summary>
         private IDbTransaction _dbTransaction;
 
-        public string GroupId { get; set; }
+        /// <summary>
+        /// 事务组id
+        /// </summary>
+        private readonly string _groupId;
+
+        #endregion
+
+        #region Property
         public TxTask TxTask { get; set; }
+        #endregion
 
-        protected AbstractTxcConnection(IDbConnection dbConnection)
+        #region Constructor
+        protected AbstractTxcConnection(IDbConnection dbConnection, string groupId)
         {
-            _dbConnection = dbConnection ?? throw new ArgumentException(nameof(dbConnection));
+            this._dbConnection = dbConnection ?? throw new ArgumentException(nameof(dbConnection));
+            this._groupId = groupId ?? throw new ArgumentException(nameof(groupId));
+            //创建信号管理器组
+            if (string.IsNullOrEmpty(groupId)) throw new ArgumentException(nameof(groupId));
+            TxTaskGroup taskGroup = TxTaskGroupManager.GetInstance().CreateTxTaskGroup(this.GroupId);
+            this.TxTask = taskGroup.CurrentTxTask;
         }
-        public virtual void Dispose()
-        {
-            CloseConnection();
-        }
+        #endregion
 
+        #region 抽象的事物方法
         protected abstract void Commit();
         protected abstract void Rollback();
 
-        public IDbTransaction BeginTransaction()
+        #endregion
+
+        #region Implement Of ILCNResource
+        /// <summary>
+        /// 用于关闭时检查是否未删除
+        /// </summary>
+        public TxTask WaitTask => this.TxTask;
+
+        /// <summary>
+        /// 事务组id
+        /// </summary>
+        public string GroupId => this._groupId;
+        #endregion
+
+        #region Implement Of IDbConnection
+
+        public virtual IDbTransaction BeginTransaction()
         {
             _dbTransaction = _dbConnection.BeginTransaction();
-            return new LCNDbTransaction(_dbTransaction, Commit, Rollback);
+            return new LCNDBTransaction(_dbTransaction, Commit, Rollback);
         }
 
-        public IDbTransaction BeginTransaction(IsolationLevel il)
+        public virtual IDbTransaction BeginTransaction(IsolationLevel il)
         {
             _dbTransaction = _dbConnection.BeginTransaction(il);
-            return new LCNDbTransaction(_dbTransaction, Commit, Rollback);
+            return new LCNDBTransaction(_dbTransaction, Commit, Rollback);
         }
 
-        public void ChangeDatabase(string databaseName)
+        public virtual void ChangeDatabase(string databaseName)
         {
             _dbConnection.ChangeDatabase(databaseName);
         }
@@ -47,37 +85,36 @@ namespace LcnCsharp.Core.Datasource
             CloseConnection();
         }
 
-        public IDbCommand CreateCommand()
+        public virtual IDbCommand CreateCommand()
         {
             return _dbConnection.CreateCommand();
         }
 
-        public void Open()
+        public virtual void Open()
         {
             _dbConnection.Open();
         }
-
-        public string ConnectionString
+        public virtual void Dispose()
+        {
+            CloseConnection();
+        }
+        public virtual string ConnectionString
         {
             get => _dbConnection.ConnectionString;
             set => _dbConnection.ConnectionString = value;
         }
 
-        public int ConnectionTimeout => _dbConnection.ConnectionTimeout;
-        public string Database => _dbConnection.Database;
-        public ConnectionState State => _dbConnection.State;
+        public virtual int ConnectionTimeout => _dbConnection.ConnectionTimeout;
+        public virtual string Database => _dbConnection.Database;
+        public virtual ConnectionState State => _dbConnection.State;
 
-        public TxTask GetWaitTask()
-        {
-            return this.TxTask;
-        }
+        #endregion
 
-        public string GetGroupId()
-        {
-            return GroupId;
-        }
+        #region Implement Of ITxcConnection
 
         public IDbConnection GetRealDbConnection() => _dbConnection;
         public IDbTransaction GetRealDbTransaction() => _dbTransaction;
+
+        #endregion
     }
 }
