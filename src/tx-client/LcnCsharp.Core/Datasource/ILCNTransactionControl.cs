@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcnCsharp.Core.datasource
+namespace LcnCsharp.Core.Datasource
 {
     public interface ILCNTransactionControl
     {

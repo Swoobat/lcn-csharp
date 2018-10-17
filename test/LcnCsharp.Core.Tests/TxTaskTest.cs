@@ -1,8 +1,7 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using LcnCsharp.Core.framework.task;
+using LcnCsharp.Core.Framework.Task;
 using Xunit;
 
 namespace LcnCsharp.Core.Tests

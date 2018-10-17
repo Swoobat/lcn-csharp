@@ -16,9 +16,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{64DED654-814
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{02F6D016-1800-49E0-8267-40C0BFFE2641}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LcnCsharp.Core", "src\LcnCsharp.Core\LcnCsharp.Core.csproj", "{8844F7E8-7AC7-4761-9849-5ECF665D175D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LcnCsharp.Core.Tests", "test\LcnCsharp.Core.Tests\LcnCsharp.Core.Tests.csproj", "{A7727F40-9D06-4474-8DE3-3467D4418461}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tx-client", "tx-client", "{7B4007BF-4AB4-43C0-BB5D-7BC5B286EA6E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tx-manager", "tx-manager", "{AA908DD5-FBBC-4BFB-B819-E43FDD20574A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LcnCsharp.Core", "src\tx-client\LcnCsharp.Core\LcnCsharp.Core.csproj", "{21A7A3B2-1A19-4600-A217-3BF666B5095E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,21 +30,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8844F7E8-7AC7-4761-9849-5ECF665D175D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8844F7E8-7AC7-4761-9849-5ECF665D175D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8844F7E8-7AC7-4761-9849-5ECF665D175D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8844F7E8-7AC7-4761-9849-5ECF665D175D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A7727F40-9D06-4474-8DE3-3467D4418461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A7727F40-9D06-4474-8DE3-3467D4418461}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7727F40-9D06-4474-8DE3-3467D4418461}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7727F40-9D06-4474-8DE3-3467D4418461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21A7A3B2-1A19-4600-A217-3BF666B5095E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21A7A3B2-1A19-4600-A217-3BF666B5095E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21A7A3B2-1A19-4600-A217-3BF666B5095E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21A7A3B2-1A19-4600-A217-3BF666B5095E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8844F7E8-7AC7-4761-9849-5ECF665D175D} = {64DED654-8148-446D-B529-C4F0254797E0}
 		{A7727F40-9D06-4474-8DE3-3467D4418461} = {02F6D016-1800-49E0-8267-40C0BFFE2641}
+		{7B4007BF-4AB4-43C0-BB5D-7BC5B286EA6E} = {64DED654-8148-446D-B529-C4F0254797E0}
+		{AA908DD5-FBBC-4BFB-B819-E43FDD20574A} = {64DED654-8148-446D-B529-C4F0254797E0}
+		{21A7A3B2-1A19-4600-A217-3BF666B5095E} = {7B4007BF-4AB4-43C0-BB5D-7BC5B286EA6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD17E76B-4E7B-45CB-A0DB-41E2D82EDD4D}

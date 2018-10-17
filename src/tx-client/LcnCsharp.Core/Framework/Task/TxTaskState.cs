@@ -1,4 +1,4 @@
-﻿namespace LcnCsharp.Core.framework.task
+﻿namespace LcnCsharp.Core.Framework.Task
 {
     public enum TxTaskState
     {

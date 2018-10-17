@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LcnCsharp.Core.framework.task
+namespace LcnCsharp.Core.Framework.Task
 {
     /// <summary>
     /// TxTask组

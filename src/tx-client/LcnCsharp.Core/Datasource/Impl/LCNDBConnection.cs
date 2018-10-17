@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
-using LcnCsharp.Core.framework.task;
+using LcnCsharp.Core.Framework.Task;
 
-namespace LcnCsharp.Core.datasource
+namespace LcnCsharp.Core.Datasource.Impl
 {
     public class LCNDbConnection : AbstractTxcConnection
     {

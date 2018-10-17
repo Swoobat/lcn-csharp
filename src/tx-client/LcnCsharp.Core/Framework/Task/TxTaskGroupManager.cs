@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
 
-namespace LcnCsharp.Core.framework.task
-{
+namespace LcnCsharp.Core.Framework.Task
+{ 
     public class TxTaskGroupManager
     {
         #region Field

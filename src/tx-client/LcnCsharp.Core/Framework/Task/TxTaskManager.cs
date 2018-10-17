@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace LcnCsharp.Core.framework.task
+namespace LcnCsharp.Core.Framework.Task
 {
     /// <summary>
     /// 信号管理器

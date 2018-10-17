@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace LcnCsharp.Core.framework.task
+namespace LcnCsharp.Core.Framework.Task
 {
     /// <summary>
     /// 信号器
@@ -9,7 +9,7 @@ namespace LcnCsharp.Core.framework.task
     public class TxTask
     {
         #region Field
-        private readonly AutoResetEvent condition;
+        private readonly AutoResetEvent _condition;
         /// <summary>
         /// 是否被唤醒
         /// </summary>
@@ -38,7 +38,7 @@ namespace LcnCsharp.Core.framework.task
 
         public TxTask()
         {
-            condition = new AutoResetEvent(false);
+            _condition = new AutoResetEvent(false);
         }
 
         public TxTask(string key):this()
@@ -55,7 +55,7 @@ namespace LcnCsharp.Core.framework.task
         /// <returns></returns>
         public bool IsNotify()
         {
-            return isNotify;
+            return _isNotify;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace LcnCsharp.Core.framework.task
         /// <returns></returns>
         public bool IsAwait()
         {
-            return isAwait;
+            return _isAwait;
         }
 
         public int GetState()
@@ -72,9 +72,9 @@ namespace LcnCsharp.Core.framework.task
             return _state;
         }
 
-        public void SetState(int _state)
+        public void SetState(int state)
         {
-            this._state = _state;
+            _state = state;
         }
 
 
@@ -82,12 +82,12 @@ namespace LcnCsharp.Core.framework.task
         /// 中断线程等待信号
         /// </summary>
         /// <param name="_back">前置执行任务</param>
-        public void AwaitTask(Action _back = null)
+        public void AwaitTask(Action back = null)
         {
             #region 前置执行
             try
             {
-                _back?.Invoke();
+                back?.Invoke();
             }
             catch (Exception)
             {
@@ -95,27 +95,27 @@ namespace LcnCsharp.Core.framework.task
             }
             #endregion
 
-            isAwait = true;
+            _isAwait = true;
             //阻塞当前线程
-            condition.WaitOne();
+            _condition.WaitOne();
         }
 
         /// <summary>
         /// 释放信号
         /// </summary>
         /// <param name="_back">执行之后停顿</param>
-        public void SignalTask(Action _back = null)
+        public void SignalTask(Action back = null)
         {
-            isNotify = true;
+            _isNotify = true;
             try
             {
-                _back?.Invoke();
+                back?.Invoke();
             }
             catch (Exception)
             {
                 //ignore
             }
-            condition.Set();
+            _condition.Set();
         }
 
         /// <summary>

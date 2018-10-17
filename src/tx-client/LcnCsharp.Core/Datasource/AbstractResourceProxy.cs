@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace LcnCsharp.Core.datasource
+namespace LcnCsharp.Core.Datasource
 {
     public abstract class AbstractResourceProxy<C, T> : ILCNTransactionControl where T : ILCNResource
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace LcnCsharp.Core.datasource
+namespace LcnCsharp.Core.Datasource.Impl
 {
     public class LCNDbTransaction : IDbTransaction
     {

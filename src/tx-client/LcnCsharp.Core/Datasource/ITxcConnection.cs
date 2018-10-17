@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace LcnCsharp.Core.datasource
+namespace LcnCsharp.Core.Datasource
 {
     public interface ITxcConnection:IDbConnection,ILCNResource
     {

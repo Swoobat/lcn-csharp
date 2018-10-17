@@ -1,7 +1,7 @@
 ﻿using System;
-using LcnCsharp.Core.framework.task;
+using LcnCsharp.Core.Framework.Task;
 
-namespace LcnCsharp.Core.datasource
+namespace LcnCsharp.Core.Datasource
 {
     public interface ILCNResource
     {
@@ -15,6 +15,6 @@ namespace LcnCsharp.Core.datasource
         /// 事务组id
         /// </summary>
         /// <returns></returns>
-        String GetGroupId();
+        string GetGroupId();
     }
 }
