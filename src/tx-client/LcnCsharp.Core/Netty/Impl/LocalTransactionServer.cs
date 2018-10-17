@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LcnCsharp.Core.Framework.Task;
 using LcnCsharp.Core.netty;
+using LcnCsharp.Core.Framework.Task;
 
 namespace LcnCsharp.Core.Netty.Impl
 {

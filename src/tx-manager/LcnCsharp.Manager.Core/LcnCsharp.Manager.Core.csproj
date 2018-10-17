@@ -9,4 +9,8 @@
     <PackageReference Include="DotNetty.Common" Version="0.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\common\LcnCsharp.Common\LcnCsharp.Common.csproj" />
+  </ItemGroup>
+
 </Project>

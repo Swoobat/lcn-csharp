@@ -1,5 +1,4 @@
-﻿using System;
-using LcnCsharp.Core.Framework.Task;
+﻿using LcnCsharp.Core.Framework.Task;
 
 namespace LcnCsharp.Core.Datasource
 {

@@ -1,6 +1,6 @@
-﻿using LcnCsharp.Core.Framework.Task;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
+using LcnCsharp.Core.Framework.Task;
 
 namespace LcnCsharp.Core.Datasource.Impl
 {
