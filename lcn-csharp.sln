@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tx-manager", "tx-manager", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LcnCsharp.Core", "src\tx-client\LcnCsharp.Core\LcnCsharp.Core.csproj", "{21A7A3B2-1A19-4600-A217-3BF666B5095E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcnCsharp.Manager.Core", "src\tx-manager\LcnCsharp.Manager.Core\LcnCsharp.Manager.Core.csproj", "{141AA88F-5277-4A64-8CE9-85F70D10FBE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{21A7A3B2-1A19-4600-A217-3BF666B5095E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21A7A3B2-1A19-4600-A217-3BF666B5095E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21A7A3B2-1A19-4600-A217-3BF666B5095E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{141AA88F-5277-4A64-8CE9-85F70D10FBE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{141AA88F-5277-4A64-8CE9-85F70D10FBE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{141AA88F-5277-4A64-8CE9-85F70D10FBE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{141AA88F-5277-4A64-8CE9-85F70D10FBE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 		{7B4007BF-4AB4-43C0-BB5D-7BC5B286EA6E} = {64DED654-8148-446D-B529-C4F0254797E0}
 		{AA908DD5-FBBC-4BFB-B819-E43FDD20574A} = {64DED654-8148-446D-B529-C4F0254797E0}
 		{21A7A3B2-1A19-4600-A217-3BF666B5095E} = {7B4007BF-4AB4-43C0-BB5D-7BC5B286EA6E}
+		{141AA88F-5277-4A64-8CE9-85F70D10FBE7} = {AA908DD5-FBBC-4BFB-B819-E43FDD20574A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD17E76B-4E7B-45CB-A0DB-41E2D82EDD4D}
