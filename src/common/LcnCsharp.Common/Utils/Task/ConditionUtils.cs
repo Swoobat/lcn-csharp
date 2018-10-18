@@ -1,20 +1,19 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 
 namespace LcnCsharp.Common.Utils.Task
 {
     public class ConditionUtils
     {
-        private static readonly ConditionUtils _instance = new ConditionUtils();
-
-        private static readonly object _object = new object();
+        private static readonly Lazy<ConditionUtils> _instance = new Lazy<ConditionUtils>(()=> new ConditionUtils());
 
         private readonly ConcurrentDictionary<string, Task> _taskMap = new ConcurrentDictionary<string, Task>();
 
-        public static ConditionUtils GetInstance()
-        {
-            return _instance;
-        }
+        public static ConditionUtils Instance => _instance.Value;
 
+        private ConditionUtils()
+        {
+        }
         public Task CreateTask(string key)
         {
             var task = new Task(key);
