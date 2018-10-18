@@ -48,7 +48,7 @@ namespace LcnCsharp.Core.Netty.Impl
             //模拟通知
             new Task(() =>
             {
-                var taskGroup = TaskGroupManager.GetInstance().GetTaskGroup(groupId);
+                var taskGroup = TaskGroupManager.Instance.GetTaskGroup(groupId);
                 if (taskGroup != null)
                 {
                     taskGroup.State = 1;

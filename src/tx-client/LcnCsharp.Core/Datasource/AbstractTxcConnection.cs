@@ -38,7 +38,7 @@ namespace LcnCsharp.Core.Datasource
             this._groupId = groupId ?? throw new ArgumentException(nameof(groupId));
             //创建信号管理器组
             if (string.IsNullOrEmpty(groupId)) throw new ArgumentException(nameof(groupId));
-            TaskGroup taskGroup = TaskGroupManager.GetInstance().CreateTask(this.GroupId, "db");
+            TaskGroup taskGroup = TaskGroupManager.Instance.CreateTask(this.GroupId, "db");
             this.TxTask = taskGroup.CurrentTask;
         }
         #endregion

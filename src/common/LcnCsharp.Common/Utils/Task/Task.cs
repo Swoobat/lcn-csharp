@@ -40,7 +40,7 @@ namespace LcnCsharp.Common.Utils.Task
 
         public bool IsRemove()
         {
-            return !ConditionUtils.GetInstance().HasKey(Key);
+            return !ConditionUtils.Instance.HasKey(Key);
         }
 
         public bool IsAwait()
@@ -128,7 +128,7 @@ namespace LcnCsharp.Common.Utils.Task
 
         public void Remove()
         {
-            ConditionUtils.GetInstance().RemoveKey(Key);
+            ConditionUtils.Instance.RemoveKey(Key);
         }
 
         public void SignalTask()
