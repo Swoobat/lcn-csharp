@@ -12,7 +12,7 @@ namespace LcnCsharp.Manager.Core.Utils
 
         public int NowConnection { get; set; }
 
-        private bool AllowConnection { get; set; } = true;
+        public bool AllowConnection { get; set; } = true;
 
         private BlockingCollection<IChannel> _clients = null;
 
@@ -82,7 +82,7 @@ namespace LcnCsharp.Manager.Core.Utils
             _lines.TryAdd(modleName, uniqueKey);
         }
 
-        public IChannel GetChannelByUniqueKey(String uniqueKey)
+        public IChannel GetChannelByUniqueKey(string uniqueKey)
         {
             foreach (var channel in _clients)
             {

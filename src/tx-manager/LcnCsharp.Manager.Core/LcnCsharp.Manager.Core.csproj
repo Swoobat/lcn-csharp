@@ -14,4 +14,9 @@
     <ProjectReference Include="..\..\common\LcnCsharp.Common\LcnCsharp.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Netty\Service\Impl\" />
+    <Folder Include="Redis\" />
+  </ItemGroup>
+
 </Project>
