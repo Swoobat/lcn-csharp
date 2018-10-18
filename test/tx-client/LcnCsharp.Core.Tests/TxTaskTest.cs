@@ -57,9 +57,14 @@ namespace LcnCsharp.Core.Tests
 
             new Task(() =>
             {
+                var tId = Thread.CurrentThread.ManagedThreadId;
                 Thread.Sleep(3000);
                 var rtValue = "test";
-                var result = task.Execute(() => rtValue);
+                var result = task.Execute(() =>
+                {
+                    Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, tId);
+                    return rtValue;
+                });
                 Assert.Equal(rtValue, result);
             }).Start();
 
@@ -70,15 +75,15 @@ namespace LcnCsharp.Core.Tests
         [Fact]
         public void TxTask_Group_Test()
         {
-            TaskGroup group = TaskGroupManager.GetInstance().CreateTask("test", "db");
+            TaskGroup group = TaskGroupManager.Instance.CreateTask("test", "db");
             Assert.NotNull(group.CurrentTask);
-            var group2 = TaskGroupManager.GetInstance().GetTaskGroup("test");
+            var group2 = TaskGroupManager.Instance.GetTaskGroup("test");
             Assert.StrictEqual(group2, group);
             var tasks = group2.GetTasks();
             Assert.NotEmpty(tasks);
             Assert.Single(tasks);
             Assert.IsType<TxTask>(tasks.Single());
-            var task = TaskGroupManager.GetInstance().GetTask("test", "db");
+            var task = TaskGroupManager.Instance.GetTask("test", "db");
             Assert.IsType<TxTask>(task);
             Assert.StrictEqual(task, tasks.Single());
             Assert.False(task.IsAwait());
@@ -101,7 +106,7 @@ namespace LcnCsharp.Core.Tests
             Assert.True(task.IsNotify());
             task.Remove();
             Assert.True(task.IsRemove());
-            var group3 = TaskGroupManager.GetInstance().GetTaskGroup("test");
+            var group3 = TaskGroupManager.Instance.GetTaskGroup("test");
             Assert.Null(group3);
         }
 

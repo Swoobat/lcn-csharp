@@ -86,7 +86,7 @@ namespace LcnCsharp.Core.Framework.Task
             bool hasData = true;//true没有，false有
 
             string groupKey = this.Key.Split('_')[1];
-            TaskGroup taskGroup = TaskGroupManager.GetInstance().GetTaskGroup(groupKey);
+            TaskGroup taskGroup = TaskGroupManager.Instance.GetTaskGroup(groupKey);
             foreach (var task in taskGroup.GetTasks())
             {
                 if (!task.IsRemove())
@@ -97,7 +97,7 @@ namespace LcnCsharp.Core.Framework.Task
 
             if (hasData)
             {
-                TaskGroupManager.GetInstance().RemoveKey(groupKey);
+                TaskGroupManager.Instance.RemoveKey(groupKey);
             }
         }
     }

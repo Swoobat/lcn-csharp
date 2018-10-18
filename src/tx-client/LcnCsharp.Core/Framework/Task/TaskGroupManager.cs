@@ -1,4 +1,5 @@
 ﻿using LcnCsharp.Common.Utils.Task;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 
@@ -7,7 +8,8 @@ namespace LcnCsharp.Core.Framework.Task
     public class TaskGroupManager
     {
         #region Field
-        private static readonly TaskGroupManager instance = new TaskGroupManager();
+
+        private static readonly Lazy<TaskGroupManager> instance = new Lazy<TaskGroupManager>(() => new TaskGroupManager());
         private readonly ConcurrentDictionary<string, TaskGroup> taskMap = new ConcurrentDictionary<string, TaskGroup>();
 
         #endregion
@@ -19,14 +21,12 @@ namespace LcnCsharp.Core.Framework.Task
         #endregion
 
         #region Static
+
         /// <summary>
         /// 获取单例
         /// </summary>
         /// <returns></returns>
-        public static TaskGroupManager GetInstance()
-        {
-            return instance;
-        }
+        public static TaskGroupManager Instance => instance.Value;
         #endregion
 
         #region Public
@@ -47,7 +47,7 @@ namespace LcnCsharp.Core.Framework.Task
 
             string taskKey = type + "_" + key;
 
-            TxTask task = new TxTask(ConditionUtils.GetInstance().CreateTask(taskKey));
+            TxTask task = new TxTask(ConditionUtils.Instance.CreateTask(taskKey));
             taskGroup.CurrentTask = task;
             taskGroup.AddTask(task);
             taskMap.AddOrUpdate(key, taskGroup, (oldVlaue, newVlaue) => newVlaue);
