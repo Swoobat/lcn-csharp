@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LcnCsharp.Common.Logging;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 
 namespace LcnCsharp.Common.Utils.Task
 {
     public class Task
     {
-        public  AutoResetEvent Condition { get; set; }
 
-        private static readonly object _signalLock = new object();
-        private static readonly object _excuteSignalLock = new object();
-        private static readonly object _signalBackLock = new object();
-        private static readonly object _waitLock = new object();
+        public AutoResetEvent Condition { get; set; }
+
+        private static readonly object _lockWaitObj = new object();
+        private static readonly object _lockSignalObj = new object();
+        private static readonly object _lockExcuteObj = new object();
+
+
+        private readonly ILogger logger = LcnCsharpLogManager.LoggerFactory.CreateLogger<Task>();
 
         private volatile IBack _back;
 
         private object _obj;
 
-        private volatile IBack _execute;
+        private volatile Func<object> _execute;
 
         private volatile bool _hasExecute = false;
 
@@ -69,48 +72,55 @@ namespace LcnCsharp.Common.Utils.Task
         {
             Condition = new AutoResetEvent(false);
         }
-
-        public object Execute(IBack back)
+        public Task(string key) : this()
         {
-            object result = null;
-            try
+            this.Key = key;
+        }
+        public object Execute(Func<object> back)
+        {
+            lock (_lockExcuteObj)
             {
-                _execute = back;
-                _hasExecute = true;
-                ExecuteSignalTask();
-                while(_execute != null && !Thread.CurrentThread.IsAlive)
+                try
                 {
-                    Thread.Sleep(1);
+                    _execute = back;
+                    _hasExecute = true;
+                    ExecuteSignalTask();
+                    while (_execute != null && !Thread.CurrentThread.IsAlive)
+                    {
+                        try
+                        {
+                            Thread.Sleep(1);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
+                        }
+                    }
+                    return _obj;
                 }
-                result= _obj;
+                finally
+                {
+                    _obj = null;
+                }
             }
-            catch (Exception)
-            {
 
-            }
-            finally
-            {
-                _obj = null;
-            }
-            return result;
         }
 
         private void ExecuteSignalTask()
         {
-            while(!_isAwait && !Thread.CurrentThread.IsAlive)
+            while (!_isAwait && !Thread.CurrentThread.IsAlive)
             {
                 try
                 {
                     Thread.Sleep(1);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                   
+                    logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
                 }
-
             }
 
-            lock (_excuteSignalLock)
+            lock (_lockSignalObj)
             {
                 Condition.Set();
             }
@@ -123,17 +133,31 @@ namespace LcnCsharp.Common.Utils.Task
 
         public void SignalTask()
         {
-            while(_hasExecute && !Thread.CurrentThread.IsAlive)
+            while (_hasExecute && !Thread.CurrentThread.IsAlive)
             {
-                Thread.Sleep(1);
+                try
+                {
+                    Thread.Sleep(1);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
+                }
             }
 
             while (!_isAwait && !Thread.CurrentThread.IsAlive)
             {
-                Thread.Sleep(1);
+                try
+                {
+                    Thread.Sleep(1);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
+                }
             }
 
-            lock (_signalLock)
+            lock (_lockSignalObj)
             {
                 _isNotify = true;
                 Condition.Set();
@@ -142,22 +166,43 @@ namespace LcnCsharp.Common.Utils.Task
 
 
 
-        public void SignalTask(IBack back)
+        public void SignalTask(Action back)
         {
             while (_hasExecute && !Thread.CurrentThread.IsAlive)
             {
-                Thread.Sleep(1);
+                try
+                {
+                    Thread.Sleep(1);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
+                }
             }
 
             while (!_isAwait && !Thread.CurrentThread.IsAlive)
             {
-                Thread.Sleep(1);
+                try
+                {
+                    Thread.Sleep(1);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
+                }
             }
 
-            lock (_signalBackLock)
+            lock (_lockSignalObj)
             {
                 _isNotify = true;
-                back.Doing();
+                try
+                {
+                    back?.Invoke();
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
                 Condition.Set();
             }
         }
@@ -169,11 +214,11 @@ namespace LcnCsharp.Common.Utils.Task
             {
                 try
                 {
-                    _obj = _execute.Doing();
+                    _obj = _execute.Invoke();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-
+                    _obj = e;
                 }
                 _hasExecute = false;
                 _execute = null;
@@ -185,7 +230,7 @@ namespace LcnCsharp.Common.Utils.Task
         {
             try
             {
-                lock (_waitLock)
+                lock (_lockWaitObj)
                 {
                     _isAwait = true;
                     WaitTask();
@@ -193,23 +238,33 @@ namespace LcnCsharp.Common.Utils.Task
             }
             catch (Exception)
             {
-
+                //ignore
             }
         }
 
-        public void AwaitTask(IBack back)
+        public void AwaitTask(Action back)
         {
             try
             {
-                back?.Doing();
+                back?.Invoke();
             }
             catch (Exception)
             {
-                
+                //ignore
             }
 
-            _isAwait = true;
-            WaitTask();
+            try
+            {
+                lock (_lockWaitObj)
+                {
+                    _isAwait = true;
+                    WaitTask();
+                }
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
         }
 
 

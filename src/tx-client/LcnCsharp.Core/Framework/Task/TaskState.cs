@@ -3,7 +3,7 @@
     /// <summary>
     /// 信号器执行状态
     /// </summary>
-    public enum TxTaskState
+    public enum TaskState
     {
         /// <summary>
         /// 网络错误

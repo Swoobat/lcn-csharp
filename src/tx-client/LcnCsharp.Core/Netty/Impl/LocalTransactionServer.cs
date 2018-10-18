@@ -48,9 +48,12 @@ namespace LcnCsharp.Core.Netty.Impl
             //模拟通知
             new Task(() =>
             {
-                var taskGroup = TxTaskGroupManager.GetInstance().GetTxTaskGroup(groupId);
-                taskGroup.State = 1;
-                taskGroup?.SignalTask();
+                var taskGroup = TaskGroupManager.GetInstance().GetTaskGroup(groupId);
+                if (taskGroup != null)
+                {
+                    taskGroup.State = 1;
+                    taskGroup.SignalTask();
+                }
             }).Start();
 
             return localGroups.TryRemove(groupId, out _) ? 1 : 0;

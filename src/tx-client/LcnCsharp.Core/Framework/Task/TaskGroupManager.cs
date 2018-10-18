@@ -1,19 +1,20 @@
-﻿using System.Collections.Concurrent;
+﻿using LcnCsharp.Common.Utils.Task;
+using System.Collections.Concurrent;
 using System.Linq;
 
 namespace LcnCsharp.Core.Framework.Task
-{ 
-    public class TxTaskGroupManager
+{
+    public class TaskGroupManager
     {
         #region Field
-        private static readonly TxTaskGroupManager instance = new TxTaskGroupManager();
-        private readonly ConcurrentDictionary<string, TxTaskGroup> taskMap = new ConcurrentDictionary<string, TxTaskGroup>();
+        private static readonly TaskGroupManager instance = new TaskGroupManager();
+        private readonly ConcurrentDictionary<string, TaskGroup> taskMap = new ConcurrentDictionary<string, TaskGroup>();
 
         #endregion
 
         #region Constructor
 
-        private TxTaskGroupManager() { }
+        private TaskGroupManager() { }
 
         #endregion
 
@@ -22,7 +23,7 @@ namespace LcnCsharp.Core.Framework.Task
         /// 获取单例
         /// </summary>
         /// <returns></returns>
-        public static TxTaskGroupManager GetInstance()
+        public static TaskGroupManager GetInstance()
         {
             return instance;
         }
@@ -36,19 +37,19 @@ namespace LcnCsharp.Core.Framework.Task
         /// <param name="key"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public TxTaskGroup CreateTxTaskGroup(string key, string type = "db")
+        public TaskGroup CreateTask(string key, string type)
         {
-            TxTaskGroup taskGroup = GetTxTaskGroup(key);
+            TaskGroup taskGroup = GetTaskGroup(key);
             if (taskGroup == null)
             {
-                taskGroup = new TxTaskGroup(key);
+                taskGroup = new TaskGroup(key);
             }
 
             string taskKey = type + "_" + key;
 
-            TxTask task = TxTaskManager.GetInstance().CreateTxTask(taskKey);
-            taskGroup.CurrentTxTask = task;
-            taskGroup.AddTxTask(task);
+            TxTask task = new TxTask(ConditionUtils.GetInstance().CreateTask(taskKey));
+            taskGroup.CurrentTask = task;
+            taskGroup.AddTask(task);
             taskMap.AddOrUpdate(key, taskGroup, (oldVlaue, newVlaue) => newVlaue);
             return taskGroup;
         }
@@ -58,7 +59,7 @@ namespace LcnCsharp.Core.Framework.Task
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public TxTaskGroup GetTxTaskGroup(string key)
+        public TaskGroup GetTaskGroup(string key)
         {
             taskMap.TryGetValue(key, out var txTaskGroup);
             return txTaskGroup;
@@ -70,12 +71,12 @@ namespace LcnCsharp.Core.Framework.Task
         /// <param name="key"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public TxTask GetTxTask(string key, string type="db")
+        public TxTask GetTask(string key, string type)
         {
             string taskKey = type + "_" + key;
-            if (taskMap.TryGetValue(key, out TxTaskGroup txGroup))
+            if (taskMap.TryGetValue(key, out TaskGroup txGroup))
             {
-                return txGroup.GetTxTasks().FirstOrDefault(r => r.Key.Equals(taskKey));
+                return txGroup.GetTasks().FirstOrDefault(r => r.Key.Equals(taskKey));
             }
 
             return null;
