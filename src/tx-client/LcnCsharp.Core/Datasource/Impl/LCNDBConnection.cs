@@ -1,6 +1,6 @@
-﻿using System.Data;
+﻿using LcnCsharp.Core.Framework.Task;
+using System.Data;
 using System.Data.Common;
-using LcnCsharp.Core.Framework.Task;
 
 namespace LcnCsharp.Core.Datasource.Impl
 {
@@ -75,7 +75,7 @@ namespace LcnCsharp.Core.Datasource.Impl
             catch (DbException)
             {
                 RollbackConnection();
-                TxTask.SetState((int)TxTaskState.ConnectionError);
+                TxTask.SetState((int)TaskState.ConnectionError);
             }
             TxTask.Remove();
         }

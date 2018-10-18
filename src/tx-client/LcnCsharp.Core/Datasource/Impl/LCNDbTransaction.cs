@@ -77,7 +77,7 @@ namespace LcnCsharp.Core.Datasource.Impl
         public void Dispose()
         {
             _dbTransaction.Dispose();
-        } 
+        }
         #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace LcnCsharp.Common.Utils.Task
 {
     public class Task
     {
-        public  AutoResetEvent Condition { get; set; }
+        public AutoResetEvent Condition { get; set; }
 
         private static readonly object _signalLock = new object();
         private static readonly object _excuteSignalLock = new object();
@@ -78,11 +78,11 @@ namespace LcnCsharp.Common.Utils.Task
                 _execute = back;
                 _hasExecute = true;
                 ExecuteSignalTask();
-                while(_execute != null && !Thread.CurrentThread.IsAlive)
+                while (_execute != null && !Thread.CurrentThread.IsAlive)
                 {
                     Thread.Sleep(1);
                 }
-                result= _obj;
+                result = _obj;
             }
             catch (Exception)
             {
@@ -97,7 +97,7 @@ namespace LcnCsharp.Common.Utils.Task
 
         private void ExecuteSignalTask()
         {
-            while(!_isAwait && !Thread.CurrentThread.IsAlive)
+            while (!_isAwait && !Thread.CurrentThread.IsAlive)
             {
                 try
                 {
@@ -105,7 +105,7 @@ namespace LcnCsharp.Common.Utils.Task
                 }
                 catch (Exception e)
                 {
-                   
+
                 }
 
             }
@@ -123,7 +123,7 @@ namespace LcnCsharp.Common.Utils.Task
 
         public void SignalTask()
         {
-            while(_hasExecute && !Thread.CurrentThread.IsAlive)
+            while (_hasExecute && !Thread.CurrentThread.IsAlive)
             {
                 Thread.Sleep(1);
             }
@@ -205,7 +205,7 @@ namespace LcnCsharp.Common.Utils.Task
             }
             catch (Exception)
             {
-                
+
             }
 
             _isAwait = true;

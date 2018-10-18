@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\common\LcnCsharp.Common\LcnCsharp.Common.csproj" />
     <ProjectReference Include="..\..\..\src\tx-client\LcnCsharp.Core\LcnCsharp.Core.csproj" />
   </ItemGroup>
 
