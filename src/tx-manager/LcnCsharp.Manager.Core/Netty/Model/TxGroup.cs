@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace LcnCsharp.Manager.Core.Netty.Model
