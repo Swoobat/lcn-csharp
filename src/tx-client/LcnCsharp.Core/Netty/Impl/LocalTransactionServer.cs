@@ -49,8 +49,11 @@ namespace LcnCsharp.Core.Netty.Impl
             new Task(() =>
             {
                 var taskGroup = TaskGroupManager.GetInstance().GetTaskGroup(groupId);
-                taskGroup.State = 1;
-                taskGroup?.SignalTask();
+                if (taskGroup != null)
+                {
+                    taskGroup.State = 1;
+                    taskGroup.SignalTask();
+                }
             }).Start();
 
             return localGroups.TryRemove(groupId, out _) ? 1 : 0;

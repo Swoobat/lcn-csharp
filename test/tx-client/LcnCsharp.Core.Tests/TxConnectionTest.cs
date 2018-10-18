@@ -9,6 +9,7 @@ using LcnCsharp.Core.netty;
 using LcnCsharp.Core.Netty.Impl;
 using MySql.Data.MySqlClient;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace LcnCsharp.Core.Tests
 {
@@ -19,28 +20,38 @@ namespace LcnCsharp.Core.Tests
     }
     public class TxConnectionTest
     {
-        private static AsyncLocal<MyClass> TestAsyncLocal = new AsyncLocal<MyClass>();
-        private static AsyncLocal<int> TestIntAsyncLocal = new AsyncLocal<int>();
-        [Fact]
-        public void TxConnectionTest1()
+        private static readonly AsyncLocal<MyClass> TestAsyncLocal = new AsyncLocal<MyClass>();
+        private static readonly AsyncLocal<int> TestIntAsyncLocal = new AsyncLocal<int>();
+        private readonly ITestOutputHelper output;
+        public TxConnectionTest(ITestOutputHelper output)
         {
-            IDbConnection dbConnection = new LCNDBConnection(new SqlConnection(),Guid.NewGuid().ToString("N"));
-            var transaction = dbConnection.BeginTransaction();
-            transaction.Commit();
+            this.output = output;
         }
 
         [Fact]
-        public async Task TxConnectionTest2()
+        public async Task AsyncLocal_Test()
         {
-            TestAsyncLocal.Value = new MyClass{Test = "ad",TestInt = 1};
+            var ad = "ad";
+            var testInt = 1;
+            TestAsyncLocal.Value = new MyClass{Test = ad, TestInt = testInt };
             TestIntAsyncLocal.Value = 1;
-            await Task2();
+            await TaskInvoke();
+            Assert.NotEqual(2, TestIntAsyncLocal.Value);
+            Assert.NotEqual(TestAsyncLocal.Value.Test, ad);
+            Assert.NotEqual(TestAsyncLocal.Value.TestInt, testInt);
+        }
+        private async Task TaskInvoke()
+        {
             Trace.WriteLine(TestAsyncLocal.Value.Test);
             Trace.WriteLine(TestIntAsyncLocal.Value);
-            Trace.WriteLine(TestAsyncLocal.Value.TestInt);
+            await Task.Delay(1000);
+            TestAsyncLocal.Value.Test = "Task2";
+            TestAsyncLocal.Value.TestInt = 2;
+            TestIntAsyncLocal.Value = 2;
         }
+
         [Fact]
-        public void TxConnectionTest3()
+        public void TxConnection_Test01()
         {
             ITransactionServer server = new LocalTransactionServer();
             var groupId = Guid.NewGuid().ToString("N");
@@ -48,16 +59,16 @@ namespace LcnCsharp.Core.Tests
             server.CreateTransactionGroup(groupId);
             try
             {
-                using (IDbConnection dbConnection = new LCNDBConnection(new MySqlConnection("Server=localhost;Port=3306;Database=test;Uid=root;Pwd=p@ssw0rd;charset=utf8;SslMode=none;"), groupId))
+                var mysqlDbConnection = new MySqlConnection("Server=localhost;Port=3306;Database=test;Uid=root;Pwd=p@ssw0rd;charset=utf8;SslMode=none;");
+                using (IDbConnection dbConnection = new LCNDBConnection(mysqlDbConnection, groupId))
                 {
                     dbConnection.Open();
                     var transaction = dbConnection.BeginTransaction(); //返回的是我们包装的LCNDbTransaction
-
                     try
                     {
                         //执行db代码
                         var command = dbConnection.CreateCommand();
-                        command.CommandText = "insert into t_test (name) values ('aaaa');";
+                        command.CommandText = "insert into t_test (name) values ('bbbb');";
                         command.ExecuteNonQuery();
 
                         transaction.Commit(); //会调用LCNDbConnection的Commit方法 会拦截
@@ -77,15 +88,6 @@ namespace LcnCsharp.Core.Tests
             Thread.Sleep(10000);
         }
 
-        [Fact]
-        public async Task Task2()
-        {
-            Trace.WriteLine(TestAsyncLocal.Value.Test);
-            Trace.WriteLine(TestIntAsyncLocal.Value);
-            await Task.Delay(1000);
-            TestAsyncLocal.Value.Test = "Task2";
-            TestAsyncLocal.Value.TestInt = 2;
-            TestIntAsyncLocal.Value = 2;
-        }
+       
     }
 }
