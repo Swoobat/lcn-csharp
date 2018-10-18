@@ -1,7 +1,4 @@
-﻿using System;
-using DotNetty.Codecs.Json;
-using LcnCsharp.Manager.Core.Model;
-using Newtonsoft.Json;
+﻿using LcnCsharp.Manager.Core.Model;
 using Newtonsoft.Json.Linq;
 
 namespace LcnCsharp.Manager.Core.Netty.Model
@@ -9,8 +6,8 @@ namespace LcnCsharp.Manager.Core.Netty.Model
     public class TxInfo
     {
         /**
-     * 任务唯一标示
-     */
+        * 任务唯一标示
+        */
         public string Kid { get; set; }
 
         /**
