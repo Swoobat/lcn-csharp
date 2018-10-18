@@ -71,7 +71,7 @@ namespace LcnCsharp.Core.Framework.Task
         /// <param name="key"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public TxTask GetTask(string key, string type = "db")
+        public TxTask GetTask(string key, string type)
         {
             string taskKey = type + "_" + key;
             if (taskMap.TryGetValue(key, out TaskGroup txGroup))

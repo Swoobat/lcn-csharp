@@ -1,4 +1,5 @@
 ﻿using LcnCsharp.Common.Utils.Task;
+using System;
 using _Task = LcnCsharp.Common.Utils.Task.Task;
 namespace LcnCsharp.Core.Framework.Task
 {
@@ -62,7 +63,7 @@ namespace LcnCsharp.Core.Framework.Task
 
 
 
-        public new void SignalTask(IBack back)
+        public new void SignalTask(Action back)
         {
             this._task.SignalTask(back);
         }
@@ -72,7 +73,7 @@ namespace LcnCsharp.Core.Framework.Task
             this._task.AwaitTask();
         }
 
-        public new void AwaitTask(IBack back)
+        public new void AwaitTask(Action back)
         {
             this._task.AwaitTask(back);
         }
@@ -80,6 +81,8 @@ namespace LcnCsharp.Core.Framework.Task
         public new void Remove()
         {
             _task.Remove();
+
+            //当TaskGroup的最后一个task被移除的时候把TaskGroup也给移除
             bool hasData = true;//true没有，false有
 
             string groupKey = this.Key.Split('_')[1];
