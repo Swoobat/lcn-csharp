@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LcnCsharp.Manager.Core.Netty.Model
 {
@@ -27,50 +28,50 @@ namespace LcnCsharp.Manager.Core.Netty.Model
          */
         public int Rollback { get; set; } = 0;
 
-        public List<TxInfo> Infos;
+        public List<TxInfo> Infos { get; set; }
+
 
         public TxGroup()
         {
-            Infos=new List<TxInfo>();
+            Infos = new List<TxInfo>();
         }
 
 
-        public static TxGroup parser(String json)
+        public TxGroup Parser(string json)
         {
             try
             {
-                //JSONObject jsonObject = JSONObject.parseObject(json);
-                //TxGroup txGroup = new TxGroup();
-                //txGroup.setGroupId(jsonObject.getString("g"));
-                //txGroup.setStartTime(jsonObject.getLong("st"));
-                //txGroup.setNowTime(jsonObject.getLong("nt"));
-                //txGroup.setState(jsonObject.getInteger("s"));
-                //txGroup.setIsCompensate(jsonObject.getInteger("i"));
-                //txGroup.setRollback(jsonObject.getInteger("r"));
-                //txGroup.setHasOver(jsonObject.getInteger("o"));
-                //JSONArray array = jsonObject.getJSONArray("l");
-                //int length = array.size();
-                //for (int i = 0; i < length; i++)
-                //{
-                //    JSONObject object = array.getJSONObject(i);
-                //    TxInfo info = new TxInfo();
-                //    info.setKid(object.getString("k"));
-                //    info.setChannelAddress(object.getString("ca"));
-                //    info.setNotify(object.getInteger("n"));
-                //    info.setIsGroup(object.getInteger("ig"));
-                //    info.setAddress(object.getString("a"));
-                //    info.setUniqueKey(object.getString("u"));
+                var jsonObject = JObject.Parse(json);
 
-                //    info.setModel(object.getString("mn"));
-                //    info.setModelIpAddress(object.getString("ip"));
-                //    info.setMethodStr(object.getString("ms"));
+                var txGroup = new TxGroup()
+                {
+                    GroupId = jsonObject["g"].ToString(),
+                    StartTime = (long)jsonObject["st"],
+                    NowTime = (long)jsonObject["nt"],
+                    State = (int)jsonObject["s"],
+                    IsCompensate = (int)jsonObject["i"],
+                    Rollback = (int)jsonObject["r"],
+                    HasOver = (int)jsonObject["o"],
 
-                //    txGroup.getList().add(info);
-                //}
+                };
+                var array = (JArray)jsonObject["l"];
 
-                //var jsonObject = JsonConvert.DeserializeObject(json);
-                //return txGroup;
-                return null;
+                for (var i = 0; i < array.Count; i++)
+                {
+                    var info = new TxInfo();
+                    info.Kid = array["k"][i].ToString();
+                    info.ChannelAddress = array["ca"][i].ToString();
+                    info.Notify = (int)array["n"][i];
+                    info.IsGroup = (int)array["ig"][i];
+                    info.Address = array["a"][i].ToString();
+                    info.UniqueKey = array["u"][i].ToString();
+                    info.Model = array["mn"][i].ToString();
+                    info.ModelIpAddress = array["ip"][i].ToString();
+                    info.MethodStr = array["ms"][i].ToString();
+                    Infos.Add(info);
+                }
+
+                return txGroup;
 
             }
             catch (Exception e)
@@ -79,5 +80,47 @@ namespace LcnCsharp.Manager.Core.Netty.Model
             }
 
         }
+
+        public string ToJsonString(bool noList)
+        {
+            var jsonObject = new JObject
+            {
+                { "g",GroupId},
+                { "st",StartTime},
+                { "nt",NowTime},
+                { "s",State},
+                { "i",IsCompensate},
+                { "r",Rollback},
+                { "o",HasOver}
+
+            };
+            if (noList)
+            {
+                var jsonArray = new JArray();
+                foreach (var info in Infos)
+                {
+                    JObject  item= new JObject();
+                    item.Add("k",info.Kid);
+                    item.Add("ca", info.ChannelAddress);
+                    item.Add("n", info.Notify);
+                    item.Add("ig", info.IsGroup);
+                    item.Add("a", info.Address);
+                    item.Add("u", info.UniqueKey);
+                    item.Add("mn", info.Model);
+                    item.Add("ip", info.ModelIpAddress);
+                    item.Add("ms", info.MethodStr);
+                    jsonArray.Add(item);
+                }
+                jsonObject.Add("l",jsonArray);
+            }
+
+            return jsonObject.ToString();
+        }
+
+        public string ToJsonTring()
+        {
+            return ToJsonString(true);
+        }
+
     }
 }
