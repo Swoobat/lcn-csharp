@@ -1,130 +1,101 @@
-﻿using System;
-using System.Threading;
-
+﻿using LcnCsharp.Common.Utils.Task;
+using _Task = LcnCsharp.Common.Utils.Task.Task;
 namespace LcnCsharp.Core.Framework.Task
 {
     /// <summary>
     /// 信号器
     /// </summary>
-    public class TxTask
+    public class TxTask : _Task
     {
-        #region Field
-        private readonly AutoResetEvent _condition;
-        /// <summary>
-        /// 是否被唤醒
-        /// </summary>
-        private volatile bool _isNotify = false;
-        /// <summary>
-        /// 是否执行等待
-        /// </summary>
-        private volatile bool _isAwait = false;
+        private readonly _Task _task;
 
-        /// <summary>
-        /// 数据状态用于业务处理
-        /// </summary>
-        private volatile int _state = 0;
-        #endregion
-
-        #region Property
-
-        /// <summary>
-        /// 唯一标示key
-        /// </summary>
-        public string Key { get; set; }
-
-        #endregion
-
-        #region Constructor
-
-        public TxTask()
+        public TxTask(_Task task)
         {
-            _condition = new AutoResetEvent(false);
+            this._task = task;
         }
 
-        public TxTask(string key):this()
+        public new bool IsNotify()
         {
-            this.Key = key;
-        }
-        #endregion
-
-        #region Public
-
-        /// <summary>
-        /// 是否被唤醒
-        /// </summary>
-        /// <returns></returns>
-        public bool IsNotify()
-        {
-            return _isNotify;
+            return this._task.IsNotify();
         }
 
-        /// <summary>
-        /// 是否被挂起
-        /// </summary>
-        /// <returns></returns>
-        public bool IsAwait()
+        public new bool IsRemove()
         {
-            return _isAwait;
+            return this._task.IsRemove();
         }
 
-        public int GetState()
+        public new bool IsAwait()
         {
-            return _state;
+            return this._task.IsAwait();
         }
 
-        public void SetState(int state)
+        public new int GetState()
         {
-            _state = state;
+            return this._task.GetState();
+        }
+
+        public new void SetState(int state)
+        {
+            this._task.SetState(state);
+        }
+
+        public new string Key
+        {
+            get => this._task.Key;
+            set => this._task.Key = value;
+        }
+
+        public new IBack GetBack()
+        {
+            return this._task.GetBack();
+        }
+
+        public new void SetBack(IBack back)
+        {
+            this._task.SetBack(back);
+        }
+
+        public new void SignalTask()
+        {
+            this._task.SignalTask();
         }
 
 
-        /// <summary>
-        /// 中断线程等待信号
-        /// </summary>
-        /// <param name="back">前置执行任务</param>
-        public void AwaitTask(Action back = null)
+
+        public new void SignalTask(IBack back)
         {
-            #region 前置执行
-            try
+            this._task.SignalTask(back);
+        }
+
+        public new void AwaitTask()
+        {
+            this._task.AwaitTask();
+        }
+
+        public new void AwaitTask(IBack back)
+        {
+            this._task.AwaitTask(back);
+        }
+
+        public new void Remove()
+        {
+            _task.Remove();
+            bool hasData = true;//true没有，false有
+
+            string groupKey = this.Key.Split('_')[1];
+            TaskGroup taskGroup = TaskGroupManager.GetInstance().GetTaskGroup(groupKey);
+            foreach (var task in taskGroup.GetTasks())
             {
-                back?.Invoke();
+                if (!task.IsRemove())
+                {
+                    hasData = false;
+                }
             }
-            catch (Exception)
-            {
-                //ignore
-            }
-            #endregion
 
-            _isAwait = true;
-            //阻塞当前线程
-            _condition.WaitOne();
-        }
-
-        /// <summary>
-        /// 释放信号
-        /// </summary>
-        /// <param name="back">执行之后停顿</param>
-        public void SignalTask(Action back = null)
-        {
-            _isNotify = true;
-            try
+            if (hasData)
             {
-                back?.Invoke();
+                TaskGroupManager.GetInstance().RemoveKey(groupKey);
             }
-            catch (Exception)
-            {
-                //ignore
-            }
-            _condition.Set();
         }
-
-        /// <summary>
-        /// 从信号管理器移除
-        /// </summary>
-        public void Remove()
-        {
-            TxTaskManager.GetInstance().RemoveKey(this.Key);
-        }
-        #endregion
     }
 }

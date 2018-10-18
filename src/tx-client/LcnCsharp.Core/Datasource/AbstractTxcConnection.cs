@@ -1,7 +1,7 @@
 ﻿using LcnCsharp.Core.Datasource.Impl;
+using LcnCsharp.Core.Framework.Task;
 using System;
 using System.Data;
-using LcnCsharp.Core.Framework.Task;
 
 namespace LcnCsharp.Core.Datasource
 {
@@ -38,8 +38,8 @@ namespace LcnCsharp.Core.Datasource
             this._groupId = groupId ?? throw new ArgumentException(nameof(groupId));
             //创建信号管理器组
             if (string.IsNullOrEmpty(groupId)) throw new ArgumentException(nameof(groupId));
-            TxTaskGroup taskGroup = TxTaskGroupManager.GetInstance().CreateTxTaskGroup(this.GroupId);
-            this.TxTask = taskGroup.CurrentTxTask;
+            TaskGroup taskGroup = TaskGroupManager.GetInstance().CreateTask(this.GroupId, "db");
+            this.TxTask = taskGroup.CurrentTask;
         }
         #endregion
 

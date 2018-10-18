@@ -5,7 +5,7 @@ namespace LcnCsharp.Core.Framework.Task
     /// <summary>
     /// TxTask组
     /// </summary>
-    public class TxTaskGroup
+    public class TaskGroup
     {
         #region Field
         private readonly List<TxTask> _txTasks = new List<TxTask>();
@@ -17,17 +17,17 @@ namespace LcnCsharp.Core.Framework.Task
 
         public string Key { get; set; }
 
-        public TxTask CurrentTxTask { get; set; }
+        public TxTask CurrentTask { get; set; }
 
         #endregion
 
         #region Constructor
-        public TxTaskGroup()
+        public TaskGroup()
         {
 
         }
 
-        public TxTaskGroup(string key)
+        public TaskGroup(string key)
         {
             this.Key = key;
         }
@@ -40,7 +40,7 @@ namespace LcnCsharp.Core.Framework.Task
         /// 向组内添加一个TxTask
         /// </summary>
         /// <param name="task"></param>
-        public void AddTxTask(TxTask task)
+        public void AddTask(TxTask task)
         {
             _txTasks.Add(task);
         }
@@ -49,7 +49,7 @@ namespace LcnCsharp.Core.Framework.Task
         /// 获取组内所有的TxTask
         /// </summary>
         /// <returns></returns>
-        public List<TxTask> GetTxTasks()
+        public List<TxTask> GetTasks()
         {
             return _txTasks;
         }
@@ -80,7 +80,7 @@ namespace LcnCsharp.Core.Framework.Task
                 task.SetState(this.State);
                 task.SignalTask();
             }
-        } 
+        }
         #endregion
     }
 }
