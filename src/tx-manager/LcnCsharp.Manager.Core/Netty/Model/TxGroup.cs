@@ -121,5 +121,11 @@ namespace LcnCsharp.Manager.Core.Netty.Model
             return ToJsonString(true);
         }
 
+
+        public List<TxInfo> GetList()
+        {
+            return Infos;
+        }
+
     }
 }

@@ -91,7 +91,7 @@ namespace LcnCsharp.Common.Utils.Task
                         {
                             Thread.Sleep(1);
                         }
-                        catch (Exception ex)
+                        catch (System.Exception ex)
                         {
                             logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
                         }
@@ -114,7 +114,7 @@ namespace LcnCsharp.Common.Utils.Task
                 {
                     Thread.Sleep(1);
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
                 }
@@ -139,7 +139,7 @@ namespace LcnCsharp.Common.Utils.Task
                 {
                     Thread.Sleep(1);
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
                 }
@@ -151,7 +151,7 @@ namespace LcnCsharp.Common.Utils.Task
                 {
                     Thread.Sleep(1);
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
                 }
@@ -174,7 +174,7 @@ namespace LcnCsharp.Common.Utils.Task
                 {
                     Thread.Sleep(1);
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
                 }
@@ -186,7 +186,7 @@ namespace LcnCsharp.Common.Utils.Task
                 {
                     Thread.Sleep(1);
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     logger.LogError(ex, "exception on Task.Thread.Sleep(1);");
                 }
@@ -199,7 +199,7 @@ namespace LcnCsharp.Common.Utils.Task
                 {
                     back?.Invoke();
                 }
-                catch (Exception)
+                catch (System.Exception)
                 {
                     //ignore
                 }
@@ -216,7 +216,7 @@ namespace LcnCsharp.Common.Utils.Task
                 {
                     _obj = _execute.Invoke();
                 }
-                catch (Exception e)
+                catch (System.Exception e)
                 {
                     _obj = e;
                 }
@@ -236,7 +236,7 @@ namespace LcnCsharp.Common.Utils.Task
                     WaitTask();
                 }
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 //ignore
             }
@@ -248,7 +248,7 @@ namespace LcnCsharp.Common.Utils.Task
             {
                 back?.Invoke();
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 //ignore
             }
@@ -261,7 +261,7 @@ namespace LcnCsharp.Common.Utils.Task
                     WaitTask();
                 }
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 //ignore
             }
