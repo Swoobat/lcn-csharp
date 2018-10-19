@@ -27,7 +27,7 @@ namespace LcnCsharp.Manager.Core.Netty.Model
          */
         public int Rollback { get; set; } = 0;
 
-        public List<TxInfo> Infos { get; set; }
+        public static List<TxInfo> Infos { get; set; }
 
 
         public TxGroup()
@@ -36,7 +36,7 @@ namespace LcnCsharp.Manager.Core.Netty.Model
         }
 
 
-        public TxGroup Parser(string json)
+        public static TxGroup Parser(string json)
         {
             try
             {
