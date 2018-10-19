@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Compensate\Service\" />
     <Folder Include="Netty\Service\Impl\" />
   </ItemGroup>
 
