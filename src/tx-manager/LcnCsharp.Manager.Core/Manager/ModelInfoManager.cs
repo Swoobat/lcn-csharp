@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using LcnCsharp.Manager.Core.Model;
 
 namespace LcnCsharp.Manager.Core.Manager
