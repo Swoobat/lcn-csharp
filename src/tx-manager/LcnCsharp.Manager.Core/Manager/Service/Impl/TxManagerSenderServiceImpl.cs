@@ -21,8 +21,29 @@ namespace LcnCsharp.Manager.Core.Manager.Service.Impl
         {
             //绑定管道对象，检查网络
             SetChannel(@group.GetList());
-            return 0;
+            //事务不满足直接回滚事务
+            if (@group.State == 0)
+            {
+                Transaction(@group, 0);
+                return 0;
+            }
 
+            if (@group.Rollback == 1)
+            {
+                Transaction(@group, 0);
+                return -1;
+            }
+
+            bool hasOk = Transaction(@group, 1);
+            txManagerService.DealTxGroup(@group, hasOk);
+            return hasOk ? 1 : 0;
+
+        }
+
+        private bool Transaction(TxGroup txGroup, int index)
+        {
+
+            return false;
         }
 
         public string SendMsg(string model, string msg, int delay)
