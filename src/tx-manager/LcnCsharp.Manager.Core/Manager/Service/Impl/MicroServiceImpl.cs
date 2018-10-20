@@ -7,7 +7,6 @@ using LcnCsharp.Manager.Core.Config;
 using LcnCsharp.Manager.Core.Model;
 using LcnCsharp.Manager.Core.Utils;
 using Steeltoe.Discovery.Eureka;
-using Steeltoe.Discovery.Eureka.AppInfo;
 
 namespace LcnCsharp.Manager.Core.Manager.Service.Impl
 {
