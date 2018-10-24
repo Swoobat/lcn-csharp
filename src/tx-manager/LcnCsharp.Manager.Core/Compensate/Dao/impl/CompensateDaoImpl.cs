@@ -57,7 +57,7 @@ namespace LcnCsharp.Manager.Core.Compensate.Dao.impl
         public string GetCompensate(string key)
         {
             var k = $"{_configReader.Key_prefix_compensate}{key}.json";
-            return _redisServerService.GetValueByKey(key);
+            return _redisServerService.GetValueByKey(k);
         }
 
         public string GetCompensateByGroupId(string groupId)

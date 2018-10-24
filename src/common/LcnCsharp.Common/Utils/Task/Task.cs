@@ -85,11 +85,11 @@ namespace LcnCsharp.Common.Utils.Task
                     _execute = back;
                     _hasExecute = true;
                     ExecuteSignalTask();
-                    while (_execute != null && !Thread.CurrentThread.IsAlive)
+                    while (_execute != null && !System.Threading.Thread.CurrentThread.IsAlive)
                     {
                         try
                         {
-                            Thread.Sleep(1);
+                            System.Threading.Thread.Sleep(1);
                         }
                         catch (System.Exception ex)
                         {
@@ -108,11 +108,11 @@ namespace LcnCsharp.Common.Utils.Task
 
         private void ExecuteSignalTask()
         {
-            while (!_isAwait && !Thread.CurrentThread.IsAlive)
+            while (!_isAwait && !System.Threading.Thread.CurrentThread.IsAlive)
             {
                 try
                 {
-                    Thread.Sleep(1);
+                    System.Threading.Thread.Sleep(1);
                 }
                 catch (System.Exception ex)
                 {
@@ -133,11 +133,11 @@ namespace LcnCsharp.Common.Utils.Task
 
         public void SignalTask()
         {
-            while (_hasExecute && !Thread.CurrentThread.IsAlive)
+            while (_hasExecute && !System.Threading.Thread.CurrentThread.IsAlive)
             {
                 try
                 {
-                    Thread.Sleep(1);
+                    System.Threading.Thread.Sleep(1);
                 }
                 catch (System.Exception ex)
                 {
@@ -145,11 +145,11 @@ namespace LcnCsharp.Common.Utils.Task
                 }
             }
 
-            while (!_isAwait && !Thread.CurrentThread.IsAlive)
+            while (!_isAwait && !System.Threading.Thread.CurrentThread.IsAlive)
             {
                 try
                 {
-                    Thread.Sleep(1);
+                    System.Threading.Thread.Sleep(1);
                 }
                 catch (System.Exception ex)
                 {
@@ -168,11 +168,11 @@ namespace LcnCsharp.Common.Utils.Task
 
         public void SignalTask(Action back)
         {
-            while (_hasExecute && !Thread.CurrentThread.IsAlive)
+            while (_hasExecute && !System.Threading.Thread.CurrentThread.IsAlive)
             {
                 try
                 {
-                    Thread.Sleep(1);
+                    System.Threading.Thread.Sleep(1);
                 }
                 catch (System.Exception ex)
                 {
@@ -180,11 +180,11 @@ namespace LcnCsharp.Common.Utils.Task
                 }
             }
 
-            while (!_isAwait && !Thread.CurrentThread.IsAlive)
+            while (!_isAwait && !System.Threading.Thread.CurrentThread.IsAlive)
             {
                 try
                 {
-                    Thread.Sleep(1);
+                    System.Threading.Thread.Sleep(1);
                 }
                 catch (System.Exception ex)
                 {
